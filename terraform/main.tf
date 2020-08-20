@@ -1,13 +1,13 @@
 terraform {
   backend s3 {
-    bucket  = "dihtbmlt-tfstate"
-    key     = "state"
+    bucket  = "doihavethebmlt-tfstate"
+    key     = "doihavethebmlt.tfstate"
     region  = "us-east-1"
-    profile = "personal"
+    profile = "bmlt-enabled"
   }
 }
 
 provider aws {
   region  = "us-east-1"
-  profile = "personal"
+  profile = "bmlt-enabled"
 }
