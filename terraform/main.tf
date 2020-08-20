@@ -1,5 +1,5 @@
 terraform {
-  backend "s3" {
+  backend s3 {
     bucket  = "dihtbmlt-tfstate"
     key     = "state"
     region  = "us-east-1"
@@ -7,7 +7,7 @@ terraform {
   }
 }
 
-provider "aws" {
+provider aws {
   region  = "us-east-1"
   profile = "personal"
 }
