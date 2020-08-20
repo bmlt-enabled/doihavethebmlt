@@ -63,7 +63,7 @@ class LocationBox extends Component {
       askForLocation: false
     });
 
-    let url = `https://tomato.bmltenabled.org.org/main_server/client_interface/json/?switcher=GetSearchResults&lat_val=${latitude}&long_val=${longitude}&geo_width=-1`;
+    let url = `https://tomato.bmltenabled.org/main_server/client_interface/json/?switcher=GetSearchResults&lat_val=${latitude}&long_val=${longitude}&geo_width=-1`;
     let options = {headers: {'user-agent': navigator.userAgent + ' +dihtbmlt'}};
     fetch(url, options).then(
       (result) => {
