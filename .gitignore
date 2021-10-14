@@ -1,5 +1,6 @@
-/node_modules
+.DS_Store
+node_modules
 /build
-.idea
-*.iml
-terraform/.terraform
+/.svelte-kit
+/package
+
