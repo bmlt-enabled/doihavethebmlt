@@ -20,8 +20,7 @@
         .then((response) => {
           if (response.status !== 'OK') {
             console.log(response.status);
-            onError('bad');
-            return;
+            throw new Error(response.status);
           }
           onSearch({
             coords: {
@@ -32,7 +31,7 @@
           value = '';
         })
         .catch((error) => {
-          console.log('Error:', error);
+          onError(error);
         });
     }
   }
@@ -43,7 +42,7 @@
   <div class="modal-content">
     <div class="field has-addons">
       <div class="control is-expanded">
-        <input class="input is-light" type="text" bind:value />
+        <input class="input is-light" type="text" bind:value placeholder="Enter City/State or Zip Code"/>
       </div>
       <div class="control">
         <button class="button is-light" on:click={handleSearch}>Search</button>

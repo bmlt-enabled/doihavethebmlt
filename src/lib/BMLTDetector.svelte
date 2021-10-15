@@ -82,6 +82,11 @@
         progressStep.set(4);
       })
       .catch((error) => {
+        if (error instanceof GeolocationPositionError) {
+          locationModalActive = true;
+          return;
+        }
+        progressText = `Error: ${error.message}`
         console.log('Error:', error);
       });
   }
@@ -92,8 +97,12 @@
 
   function handleLocationInput(position) {
     locationModalActive = false;
-    console.log(position);
     doSearch(position);
+  }
+
+  function handleLocationInputError(error) {
+    locationModalActive = false;
+    progressText = `Error: ${error.message}`
   }
 
   onMount(() => {
@@ -129,4 +138,4 @@
   </div>
 {/if}
 
-<LocationInputModal bind:active={locationModalActive} onSearch={handleLocationInput} onError={() => {}} />
+<LocationInputModal bind:active={locationModalActive} onSearch={handleLocationInput} onError={handleLocationInputError} />
