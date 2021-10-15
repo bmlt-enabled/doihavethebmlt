@@ -100,6 +100,14 @@
     doSearch(position);
   }
 
+  function handleLocationInputCancel() {
+    console.log("cancelled");
+    locationModalActive = false;
+    if ($progressStep != progressTotalSteps) {
+      progressStep.set(-1);
+    }
+  }
+
   function handleLocationInputError(error) {
     locationModalActive = false;
     progressText = `Error: ${error.message}`
@@ -110,7 +118,10 @@
   });
 </script>
 
-{#if $progressStep < progressTotalSteps}
+{#if $progressStep < 0}
+  <MoreInfo title="How do I learn more about the BMLT?" />
+  <button class="button is-fullwidth" on:click={handleSearchAgainClick}>Search for a Location</button>
+{:else if $progressStep < progressTotalSteps}
   <progress class="progress is-medium" value={$progressStep} max={progressTotalSteps} />
   <div class="has-text-centered">{progressText}</div>
 {:else if meetingDistanceInMiles < 100}
@@ -138,4 +149,4 @@
   </div>
 {/if}
 
-<LocationInputModal bind:active={locationModalActive} onSearch={handleLocationInput} onError={handleLocationInputError} />
+<LocationInputModal bind:active={locationModalActive} onSearch={handleLocationInput} onCancel={handleLocationInputCancel} onError={handleLocationInputError} />
