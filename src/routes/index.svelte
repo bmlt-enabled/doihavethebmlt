@@ -10,14 +10,8 @@
 <section class="section p-5">
   <div class="container">
     <div class="card p-5">
-      <h2 class="title is-2">Do I have the BMLT?</h2>
+      <h4 class="title is-4">Do I have the BMLT?</h4>
       <BMLTDetector />
     </div>
   </div>
 </section>
-
-<style>
-  .container {
-    max-width: 700px;
-  }
-</style>
