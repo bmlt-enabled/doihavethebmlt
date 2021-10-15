@@ -2,6 +2,7 @@
   export let active;
   export let onSearch;
   export let onError;
+  export let onCancel;
 
   let modal;
   let value;
@@ -31,10 +32,14 @@
         });
     }
   }
+
+  function handleCancel() {
+    onCancel();
+  }
 </script>
 
 <div class="modal" class:is-active={active} bind:this={modal}>
-  <div class="modal-background" />
+  <div class="modal-background" on:click={handleCancel} />
   <div class="modal-content">
     <div class="field has-addons">
       <div class="control is-expanded">
