@@ -14,23 +14,19 @@
 
   function handleSearch() {
     if (value) {
-      let url = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBiYze0yzbraSghRqXvK1_oAtQlqe9n594&address=${value}&sensor=false`;
+      let url = `https://api.geocod.io/v1.6/geocode?api_key=8a8ceea13e3cad86e8c64616d41d3333d488c66&q=${value}`
       fetch(url)
-        .then((response) => response.json())
-        .then((response) => {
-          if (response.status !== 'OK') {
-            console.log(response.status);
-            throw new Error(response.status);
-          }
+        .then(response => response.json())
+        .then(response => response.results[0])
+        .then(result => {
           onSearch({
             coords: {
-              latitude: response.results[0].geometry.location.lat,
-              longitude: response.results[0].geometry.location.lng
+              latitude: result.location.lat,
+              longitude: result.location.lng
             }
           });
-          value = '';
         })
-        .catch((error) => {
+        .catch(error => {
           onError(error);
         });
     }
