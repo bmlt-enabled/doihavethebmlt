@@ -1,0 +1,6 @@
+{
+	"appId": "org.bmltenabled.doihavethebmlt",
+	"appName": "doihavethebmlt",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
