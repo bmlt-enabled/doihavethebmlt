@@ -135,7 +135,7 @@
     <SearchShare {latitude} {longitude} />
     <button class="button is-fullwidth" on:click={handleSearchAgainClick}>Search for Another Location</button>
   </div>
-  <div class="box is-shadowless has-background-white-ter p-3 m-0">
+  <div class="box is-shadowless p-3 m-0">
     <p class="is-size-7">Root server: {rootServerUrl}</p>
   </div>
 {:else}
