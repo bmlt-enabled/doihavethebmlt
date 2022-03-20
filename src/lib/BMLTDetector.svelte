@@ -31,64 +31,56 @@
     );
   }
 
-  function doSearch(position) {
-    progressText = 'Determining location...';
+  async function doSearch(position) {
     progressStep.set(1);
+    progressText = 'Determining location...';
 
-    let positionPromise;
-    let httpOptions = { headers: { 'user-agent': navigator.userAgent + ' +dihtbmlt' } };
-
-    let urlParams = new URLSearchParams(window.location.search);
-    if (position) {
-      positionPromise = new Promise((resolve, reject) => {
-        resolve(position);
-      });
-    } else if (urlParams.has('latitude') && urlParams.has('longitude')) {
-      latitude = urlParams.get('latitude');
-      longitude = urlParams.get('longitude');
-      positionPromise = new Promise((resolve, reject) => {
-        resolve({
+    if (!position) {
+      let urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('latitude') && urlParams.has('longitude')) {
+        position = {
           coords: {
             latitude: latitude,
             longitude: longitude
           }
-        });
-      });
-    } else {
-      positionPromise = getPosition();
+        };
+      } else {
+        position = await getPosition();
+      }
     }
 
-    positionPromise
-      .then((position) => {
-        latitude = position.coords.latitude;
-        longitude = position.coords.longitude;
-        progressText = 'Finding nearest meeting...';
-        progressStep.set(2);
-        return fetch(`https://tomato.bmltenabled.org/main_server/client_interface/json/?switcher=GetSearchResults&lat_val=${latitude}&long_val=${longitude}&geo_width=-1`, httpOptions);
-      })
-      .then((response) => response.json())
-      .then((meetings) => meetings[0])
-      .then((meeting) => {
-        meetingDistanceInMiles = Math.round(meeting.distance_in_miles);
-        meetingDistanceInKilometers = Math.round(meeting.distance_in_km);
-        progressText = 'Retrieving root server url...';
-        progressStep.set(3);
-        return fetch(`https://tomato.bmltenabled.org/rest/v1/rootservers/${meeting.root_server_id}/`, httpOptions);
-      })
-      .then((response) => response.json())
-      .then((root_server) => {
-        rootServerUrl = root_server.root_server_url;
-        progressText = '';
-        progressStep.set(4);
-      })
-      .catch((error) => {
-        if (error instanceof GeolocationPositionError) {
-          locationModalActive = true;
-          return;
-        }
-        progressText = `Error: ${error.message}`
-        console.log('Error:', error);
-      });
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
+
+    try {
+      progressStep.set(2);
+      progressText = 'Finding nearest meeting...';
+      let httpOptions = { headers: { 'user-agent': navigator.userAgent + ' +dihtbmlt' } };
+      let meetingsResponse = await fetch(
+        `https://tomato.bmltenabled.org/main_server/client_interface/json/?switcher=GetSearchResults&lat_val=${latitude}&long_val=${longitude}&geo_width=-1`,
+        httpOptions
+      );
+      let meetings = await meetingsResponse.json();
+      let meeting = meetings[0];
+      meetingDistanceInMiles = Math.round(meeting.distance_in_miles);
+      meetingDistanceInKilometers = Math.round(meeting.distance_in_km);
+
+      progressStep.set(3);
+      progressText = 'Retrieving root server url...';
+      let rootServersResponse = await fetch(`https://tomato.bmltenabled.org/rest/v1/rootservers/${meeting.root_server_id}/`, httpOptions);
+      let root_server = await rootServersResponse.json();
+      rootServerUrl = root_server.root_server_url;
+
+      progressStep.set(4);
+      progressText = '';
+    } catch (error) {
+      if (error instanceof GeolocationPositionError) {
+        locationModalActive = true;
+        return;
+      }
+      progressText = `Error: ${error.message}`;
+      console.log('Error:', error);
+    }
   }
 
   function handleSearchAgainClick() {
@@ -101,7 +93,7 @@
   }
 
   function handleLocationInputCancel() {
-    console.log("cancelled");
+    console.log('cancelled');
     locationModalActive = false;
     if ($progressStep != progressTotalSteps) {
       progressStep.set(-1);
@@ -110,7 +102,7 @@
 
   function handleLocationInputError(error) {
     locationModalActive = false;
-    progressText = `Error: ${error.message}`
+    progressText = `Error: ${error.message}`;
   }
 
   onMount(() => {
