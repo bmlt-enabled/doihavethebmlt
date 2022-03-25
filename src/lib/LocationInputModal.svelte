@@ -34,6 +34,12 @@
   function handleCancel() {
     onCancel();
   }
+
+  function keySubmit(event) {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  }
 </script>
 
 <div class="modal" class:is-active={active} bind:this={modal}>
@@ -41,7 +47,7 @@
   <div class="modal-content p-5">
     <div class="field has-addons">
       <div class="control is-expanded">
-        <input class="input is-light" type="text" bind:value placeholder="Enter City/State or Zip Code" />
+        <input class="input is-light" type="text" on:keydown={keySubmit} bind:value placeholder="Enter City/State or Zip Code" />
       </div>
       <div class="control">
         <button class="button is-light" on:click={handleSearch}>Search</button>
