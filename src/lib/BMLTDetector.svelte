@@ -45,7 +45,14 @@
           }
         };
       } else {
-        position = await getPosition();
+        try {
+          position = await getPosition();
+        } catch (error) {
+          if (error instanceof GeolocationPositionError) {
+            locationModalActive = true;
+            return;
+          }
+        }
       }
     }
 
