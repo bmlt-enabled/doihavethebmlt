@@ -18,7 +18,8 @@
       try {
         let url = `https://api.geocod.io/v1.6/geocode?api_key=8a8ceea13e3cad86e8c64616d41d3333d488c66&q=${value}`;
         let response = await fetch(url);
-        let result = response.results[0];
+        let results = await response.json();
+        let result = results.results[0]
         onSearch({
           coords: {
             latitude: result.location.lat,
