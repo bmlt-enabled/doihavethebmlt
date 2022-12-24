@@ -40,8 +40,8 @@
       if (urlParams.has('latitude') && urlParams.has('longitude')) {
         position = {
           coords: {
-            latitude: latitude,
-            longitude: longitude
+            latitude: urlParams.get('latitude'),
+            longitude: urlParams.get('longitude')
           }
         };
       } else {
