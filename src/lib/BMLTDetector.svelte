@@ -74,9 +74,9 @@
 
       progressStep.set(3);
       progressText = 'Retrieving root server url...';
-      let rootServersResponse = await fetch(`https://tomato.bmltenabled.org/rest/v1/rootservers/${meeting.root_server_id}/`, httpOptions);
+      let rootServersResponse = await fetch(`https://tomato.bmltenabled.org/main_server/api/v1/rootservers/${meeting.root_server_id}/`, httpOptions);
       let root_server = await rootServersResponse.json();
-      rootServerUrl = root_server.root_server_url;
+      rootServerUrl = root_server.url;
 
       progressStep.set(4);
       progressText = '';
