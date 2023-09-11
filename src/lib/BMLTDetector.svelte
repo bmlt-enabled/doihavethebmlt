@@ -64,7 +64,7 @@
       progressText = 'Finding nearest meeting...';
       let httpOptions = { headers: { 'user-agent': navigator.userAgent + ' +dihtbmlt' } };
       let meetingsResponse = await fetch(
-        `https://tomato.bmltenabled.org/main_server/client_interface/json/?switcher=GetSearchResults&lat_val=${latitude}&long_val=${longitude}&geo_width=-1`,
+        `https://aggregator.bmltenabled.org/main_server/client_interface/json/?switcher=GetSearchResults&lat_val=${latitude}&long_val=${longitude}&geo_width=-1`,
         httpOptions
       );
       let meetings = await meetingsResponse.json();
@@ -74,7 +74,7 @@
 
       progressStep.set(3);
       progressText = 'Retrieving root server url...';
-      let rootServersResponse = await fetch(`https://tomato.bmltenabled.org/main_server/api/v1/rootservers/${meeting.root_server_id}/`, httpOptions);
+      let rootServersResponse = await fetch(`https://aggregator.bmltenabled.org/main_server/api/v1/rootservers/${meeting.root_server_id}/`, httpOptions);
       let root_server = await rootServersResponse.json();
       rootServerUrl = root_server.url;
 
