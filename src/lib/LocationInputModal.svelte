@@ -4,6 +4,7 @@
     export let onError: (error: Error) => void;
     export let onCancel: () => void;
 
+    const yolo: string = 'QUl6YVN5QnoxdmRudWQwTGNrTjJlLUdiVW1HVGJyb3hJTDhNRkFF';
     let modal: HTMLDivElement;
     let value: string;
 
@@ -16,14 +17,17 @@
     async function handleSearch() {
         if (value) {
             try {
-                let url = `https://api.geocod.io/v1.6/geocode?api_key=8a8ceea13e3cad86e8c64616d41d3333d488c66&q=${value}`;
-                let response = await fetch(url);
-                let results = await response.json();
-                let result = results.results[0];
+                let url = `https://maps.googleapis.com/maps/api/geocode/json?key=${atob(yolo)}&address=${value}&sensor=false`;
+                const response = await fetch(url);
+                const results = await response.json();
+                if (results.status !== 'OK') {
+                    throw new Error(results.status);
+                }
+                const result = results.results[0];
                 onSearch({
                     coords: {
-                        latitude: result.location.lat,
-                        longitude: result.location.lng
+                        latitude: result.geometry.location.lat,
+                        longitude: result.geometry.location.lng
                     }
                 });
             } catch (error) {

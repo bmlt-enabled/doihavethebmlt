@@ -174,6 +174,7 @@
         {#if latitude !== undefined && longitude !== undefined}
             <SearchShare {latitude} {longitude} />
         {/if}
+        <button class="button is-fullwidth" on:click={handleSearchAgainClick}>Search for Another Location</button>
     </div>
 {/if}
 
