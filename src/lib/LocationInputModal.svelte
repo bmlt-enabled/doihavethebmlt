@@ -3,8 +3,6 @@
     export let onSearch: (data: { coords: { latitude: number; longitude: number } }) => void;
     export let onError: (error: Error) => void;
     export let onCancel: () => void;
-
-    const yolo: string = 'QUl6YVN5QnoxdmRudWQwTGNrTjJlLUdiVW1HVGJyb3hJTDhNRkFF';
     let modal: HTMLDivElement;
     let value: string;
 
@@ -17,17 +15,14 @@
     async function handleSearch() {
         if (value) {
             try {
-                let url = `https://maps.googleapis.com/maps/api/geocode/json?key=${atob(yolo)}&address=${value}&sensor=false`;
+                let url = `https://geo-tz.api.bmltenabled.org/bmlt/geocode?address=${value}`;
                 const response = await fetch(url);
                 const results = await response.json();
-                if (results.status !== 'OK') {
-                    throw new Error(results.status);
-                }
-                const result = results.results[0];
+                const geometry = results.geometry;
                 onSearch({
                     coords: {
-                        latitude: result.geometry.location.lat,
-                        longitude: result.geometry.location.lng
+                        latitude: geometry.location.lat,
+                        longitude: geometry.location.lng
                     }
                 });
             } catch (error) {
