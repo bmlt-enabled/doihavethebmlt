@@ -7,20 +7,20 @@
     import SearchShare from '$lib/SearchShare.svelte';
     import LocationInputModal from '$lib/LocationInputModal.svelte';
 
-    let rootServerUrl: string | undefined;
-    let meetingDistanceInMiles: number | undefined;
-    let meetingDistanceInKilometers: number | undefined;
-    let latitude: number | undefined;
-    let longitude: number | undefined;
+    let rootServerUrl: string | undefined = $state();
+    let meetingDistanceInMiles: number | undefined = $state();
+    let meetingDistanceInKilometers: number | undefined = $state();
+    let latitude: number | undefined = $state();
+    let longitude: number | undefined = $state();
 
     const progressTotalSteps: number = 4;
-    let progressText: string = '';
+    let progressText: string = $state('');
     let progressStep = tweened(0, {
         duration: 400,
         easing: cubicOut
     });
 
-    let locationModalActive: boolean = false;
+    let locationModalActive: boolean = $state(false);
 
     interface GeolocationCoordinates {
         latitude: number;
@@ -143,9 +143,9 @@
 
 {#if $progressStep < 0}
     <MoreInfo title="How do I learn more about the BMLT?" />
-    <button class="button is-fullwidth" on:click={handleSearchAgainClick}>Search for a Location</button>
+    <button class="button is-fullwidth" onclick={handleSearchAgainClick}>Search for a Location</button>
 {:else if $progressStep < progressTotalSteps}
-    <progress class="progress is-medium" value={$progressStep} max={progressTotalSteps} />
+    <progress class="progress is-medium" value={$progressStep} max={progressTotalSteps}></progress>
     <div class="has-text-centered">{progressText}</div>
 {:else if meetingDistanceInMiles !== undefined && meetingDistanceInMiles < 100}
     <div class="content">
@@ -158,7 +158,7 @@
         {#if latitude !== undefined && longitude !== undefined}
             <SearchShare {latitude} {longitude} />
         {/if}
-        <button class="button is-fullwidth" on:click={handleSearchAgainClick}>Search for Another Location</button>
+        <button class="button is-fullwidth" onclick={handleSearchAgainClick}>Search for Another Location</button>
     </div>
     <div class="box is-shadowless p-3 m-0">
         <p class="is-size-7">Root server: {rootServerUrl}</p>
@@ -174,7 +174,7 @@
         {#if latitude !== undefined && longitude !== undefined}
             <SearchShare {latitude} {longitude} />
         {/if}
-        <button class="button is-fullwidth" on:click={handleSearchAgainClick}>Search for Another Location</button>
+        <button class="button is-fullwidth" onclick={handleSearchAgainClick}>Search for Another Location</button>
     </div>
 {/if}
 

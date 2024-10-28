@@ -1,16 +1,22 @@
 <script lang="ts">
-    export let active: boolean;
-    export let onSearch: (data: { coords: { latitude: number; longitude: number } }) => void;
-    export let onError: (error: Error) => void;
-    export let onCancel: () => void;
-    let modal: HTMLDivElement;
-    let value: string;
+    import { run } from 'svelte/legacy';
 
-    $: {
+    interface Props {
+        active: boolean;
+        onSearch: (data: { coords: { latitude: number; longitude: number } }) => void;
+        onError: (error: Error) => void;
+        onCancel: () => void;
+    }
+
+    let { active = $bindable(), onSearch, onError, onCancel }: Props = $props();
+    let modal: HTMLDivElement;
+    let value: string = $state('');
+
+    run(() => {
         if (modal && active) {
             document.body.appendChild(modal);
         }
-    }
+    });
 
     async function handleSearch() {
         if (value) {
@@ -49,14 +55,14 @@
 </script>
 
 <div class="modal" class:is-active={active} bind:this={modal}>
-    <div class="modal-background" role="button" tabindex="0" on:click={handleCancel} on:keydown={handleBackgroundKey} />
+    <div class="modal-background" role="button" tabindex="0" onclick={handleCancel} onkeydown={handleBackgroundKey}></div>
     <div class="modal-content p-5">
         <div class="field has-addons">
             <div class="control is-expanded">
-                <input class="input is-light" type="text" on:keydown={keySubmit} bind:value placeholder="Enter City/State or Zip Code" />
+                <input class="input is-light" type="text" onkeydown={keySubmit} bind:value placeholder="Enter City/State or Zip Code" />
             </div>
             <div class="control">
-                <button class="button is-light" on:click={handleSearch}>Search</button>
+                <button class="button is-light" onclick={handleSearch}>Search</button>
             </div>
         </div>
     </div>
