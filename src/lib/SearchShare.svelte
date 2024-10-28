@@ -1,10 +1,14 @@
 <script lang="ts">
     import { onMount } from 'svelte';
 
-    export let latitude: number;
-    export let longitude: number;
-    let copied: boolean = false;
-    let url: string = '';
+    interface Props {
+        latitude: number;
+        longitude: number;
+    }
+
+    let { latitude, longitude }: Props = $props();
+    let copied: boolean = $state(false);
+    let url: string = $state('');
 
     function handleCopy() {
         copied = true;
@@ -23,14 +27,14 @@
             <input class="input" type="text" name="url" value={url} readonly />
         </div>
         <div class="control">
-            <button class="button" on:click={handleCopy}>
+            <button class="button" onclick={handleCopy}>
                 {#if copied === true}
                     <span class="icon is-small">
-                        <i class="far fa-copy" />
+                        <i class="far fa-copy"></i>
                     </span>
                 {:else}
                     <span class="icon is-small">
-                        <i class="fas fa-copy" />
+                        <i class="fas fa-copy"></i>
                     </span>
                 {/if}
                 <span>Copy</span>
