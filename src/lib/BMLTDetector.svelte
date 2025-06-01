@@ -90,7 +90,7 @@
                 meetingDistanceInKilometers = Math.round(meeting.distance_in_km);
 
                 await progressStep.set(3);
-                progressText = 'Retrieving root server url...';
+                progressText = 'Retrieving server url...';
                 let rootServersResponse = await fetch(`https://aggregator.bmltenabled.org/main_server/api/v1/rootservers/${meeting.root_server_id}/`, httpOptions);
                 let root_server = await rootServersResponse.json();
                 rootServerUrl = root_server.url;
@@ -161,7 +161,7 @@
         <button class="button is-fullwidth" onclick={handleSearchAgainClick}>Search for Another Location</button>
     </div>
     <div class="box is-shadowless p-3 m-0">
-        <p class="is-size-7">Root server: {rootServerUrl}</p>
+        <p class="is-size-7">Server: {rootServerUrl}</p>
     </div>
 {:else}
     <div class="content">
