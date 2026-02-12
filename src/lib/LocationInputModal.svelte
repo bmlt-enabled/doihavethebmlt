@@ -22,7 +22,12 @@
         if (value) {
             try {
                 let url = `https://geo-tz.api.bmltenabled.org/bmlt/geocode?address=${value}`;
-                const response = await fetch(url);
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'X-Api-Key': window.atob('SGdRMDRDMlR0RXh3UDVZTXE1')
+                    }
+                });
                 const results = await response.json();
                 const geometry = results.geometry;
                 onSearch({
