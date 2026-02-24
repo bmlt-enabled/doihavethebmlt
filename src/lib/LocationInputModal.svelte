@@ -25,7 +25,7 @@
                 const response = await fetch(url, {
                     method: 'GET',
                     headers: {
-                        'X-Api-Key': window.atob('SGdRMDRDMlR0RXh3UDVZTXE1')
+                        'bmlt-app': 'doihavethebmlt'
                     }
                 });
                 const results = await response.json();
