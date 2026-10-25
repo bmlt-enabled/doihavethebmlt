@@ -34,7 +34,8 @@
         "tslib": "^2.4.1",
         "typescript": "^5.5.0",
         "typescript-eslint": "^8.15.0",
-        "vite": "^7.0.0"
+        "vite": "^7.0.0",
+        "wrangler": "^4.152.0"
     },
     "dependencies": {
         "@bmlt-enabled/geo-api-typescript-client": "^1.0.1"
