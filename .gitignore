@@ -4,3 +4,7 @@ node_modules
 /.svelte-kit
 /package
 /.vscode
+
+# wrangler / local Pages Functions dev
+.wrangler
+.dev.vars

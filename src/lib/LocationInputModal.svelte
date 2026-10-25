@@ -1,5 +1,6 @@
 <script lang="ts">
     import { run } from 'svelte/legacy';
+    import { Configuration, GeocodingApi } from '@bmlt-enabled/geo-api-typescript-client';
 
     interface Props {
         active: boolean;
@@ -7,6 +8,20 @@
         onError: (error: Error) => void;
         onCancel: () => void;
     }
+
+    interface GeocodeLocation {
+        lat: number;
+        lng: number;
+    }
+
+    interface GeocodeResponse {
+        results?: { geometry?: { location?: GeocodeLocation } }[];
+        geometry?: { location?: GeocodeLocation };
+    }
+
+    // Empty basePath keeps requests same-origin so they hit the /api/geocode
+    // Cloudflare Pages Function, which adds the Bearer token server-side.
+    const geocodingApi = new GeocodingApi(new Configuration({ basePath: '' }));
 
     let { active = $bindable(), onSearch, onError, onCancel }: Props = $props();
     let modal: HTMLDivElement;
@@ -21,19 +36,20 @@
     async function handleSearch() {
         if (value) {
             try {
-                let url = `https://geo-tz.api.bmltenabled.org/bmlt/geocode?address=${value}`;
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'bmlt-app': 'doihavethebmlt'
-                    }
+                const response = await geocodingApi.geocodeRaw({
+                    application: 'doihavethebmlt',
+                    search: value,
+                    referrer: window.location.href
                 });
-                const results = await response.json();
-                const geometry = results.geometry;
+                const results = (await response.raw.json()) as GeocodeResponse;
+                const location = results.results?.[0]?.geometry?.location ?? results.geometry?.location;
+                if (!location) {
+                    throw new Error('No results found for that location');
+                }
                 onSearch({
                     coords: {
-                        latitude: geometry.location.lat,
-                        longitude: geometry.location.lng
+                        latitude: location.lat,
+                        longitude: location.lng
                     }
                 });
             } catch (error) {
