@@ -9,16 +9,6 @@
         onCancel: () => void;
     }
 
-    interface GeocodeLocation {
-        lat: number;
-        lng: number;
-    }
-
-    interface GeocodeResponse {
-        results?: { geometry?: { location?: GeocodeLocation } }[];
-        geometry?: { location?: GeocodeLocation };
-    }
-
     // Empty basePath keeps requests same-origin so they hit the /api/geocode
     // Cloudflare Pages Function, which adds the Bearer token server-side.
     const geocodingApi = new GeocodingApi(new Configuration({ basePath: '' }));
@@ -36,14 +26,13 @@
     async function handleSearch() {
         if (value) {
             try {
-                const response = await geocodingApi.geocodeRaw({
+                const result = await geocodingApi.geocode({
                     application: 'doihavethebmlt',
                     search: value,
                     referrer: window.location.href
                 });
-                const results = (await response.raw.json()) as GeocodeResponse;
-                const location = results.results?.[0]?.geometry?.location ?? results.geometry?.location;
-                if (!location) {
+                const location = result.results[0]?.geometry?.location;
+                if (location?.lat === undefined || location?.lng === undefined) {
                     throw new Error('No results found for that location');
                 }
                 onSearch({
