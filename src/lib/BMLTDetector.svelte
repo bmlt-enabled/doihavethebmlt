@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { tweened } from 'svelte/motion';
+    import { Tween } from 'svelte/motion';
     import { cubicOut } from 'svelte/easing';
 
     import MoreInfo from '$lib/MoreInfo.svelte';
@@ -15,7 +15,7 @@
 
     const progressTotalSteps: number = 4;
     let progressText: string = $state('');
-    let progressStep = tweened(0, {
+    let progressStep = new Tween(0, {
         duration: 400,
         easing: cubicOut
     });
@@ -126,7 +126,7 @@
     function handleLocationInputCancel() {
         console.log('cancelled');
         locationModalActive = false;
-        if ($progressStep != progressTotalSteps) {
+        if (progressStep.current != progressTotalSteps) {
             progressStep.set(-1);
         }
     }
@@ -141,11 +141,11 @@
     });
 </script>
 
-{#if $progressStep < 0}
+{#if progressStep.current < 0}
     <MoreInfo title="How do I learn more about the BMLT?" />
     <button class="button is-fullwidth" onclick={handleSearchAgainClick}>Search for a Location</button>
-{:else if $progressStep < progressTotalSteps}
-    <progress class="progress is-medium" value={$progressStep} max={progressTotalSteps}></progress>
+{:else if progressStep.current < progressTotalSteps}
+    <progress class="progress is-medium" value={progressStep.current} max={progressTotalSteps}></progress>
     <div class="has-text-centered">{progressText}</div>
 {:else if meetingDistanceInMiles !== undefined && meetingDistanceInMiles < 100}
     <div class="content">

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { run } from 'svelte/legacy';
     import { Configuration, GeocodingApi } from '@bmlt-enabled/geo-api-typescript-client';
+    import type { Attachment } from 'svelte/attachments';
 
     interface Props {
         active: boolean;
@@ -14,14 +14,12 @@
     const geocodingApi = new GeocodingApi(new Configuration({ basePath: '' }));
 
     let { active = $bindable(), onSearch, onError, onCancel }: Props = $props();
-    let modal: HTMLDivElement;
     let value: string = $state('');
 
-    run(() => {
-        if (modal && active) {
-            document.body.appendChild(modal);
-        }
-    });
+    const portalToBody: Attachment<HTMLDivElement> = (node) => {
+        document.body.appendChild(node);
+        return () => node.remove();
+    };
 
     async function handleSearch() {
         if (value) {
@@ -64,7 +62,7 @@
     }
 </script>
 
-<div class="modal" class:is-active={active} bind:this={modal}>
+<div class={['modal', { 'is-active': active }]} {@attach portalToBody}>
     <div class="modal-background" role="button" tabindex="0" onclick={handleCancel} onkeydown={handleBackgroundKey}></div>
     <div class="modal-content p-5">
         <div class="field has-addons">

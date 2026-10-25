@@ -10,9 +10,14 @@
     let copied: boolean = $state(false);
     let url: string = $state('');
 
-    function handleCopy() {
-        copied = true;
-        navigator.clipboard.writeText(url);
+    async function handleCopy() {
+        try {
+            await navigator.clipboard.writeText(url);
+            copied = true;
+            setTimeout(() => (copied = false), 2000);
+        } catch (error) {
+            console.error('Copy failed:', error);
+        }
     }
 
     onMount(() => {

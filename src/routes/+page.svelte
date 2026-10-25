@@ -4,7 +4,7 @@
 
 <svelte:head>
     <title>Do I have the BMLT?</title>
-    <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" data-auto-a11y="true"></script>
+    <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" data-auto-a11y="true" defer></script>
 </svelte:head>
 
 <section class="section p-5">
